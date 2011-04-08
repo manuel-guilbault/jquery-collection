@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>jQuery Example Page</title>
+<script type="text/javascript" src="jquery-1.5.2.js"></script>
+<script type="text/javascript" src="jquery.collection.js"></script>
+<script type="text/javascript">
+		$(function() {
+			$('#test0').click(function(e) {
+                e.preventDefault();
+                $('#list0').collection('sort');
+            });
+            
+			$('#test1').click(function(e) {
+                e.preventDefault();
+                $('#list1').collection('sort', {
+                    selector: '.sortable'
+                });
+            });
+            
+			$('#test2').click(function(e) {
+				e.preventDefault();
+			    $('#list2').collection('sort', {
+				    predicate: 'label'
+			    });
+			});
+			
+			$('#test3').click(function(e) {
+                e.preventDefault();
+                $('#list3').collection('sort', {
+                    predicate: 'label',
+                    compare: 'int'
+                });
+            });
+            
+            $('#test4').click(function(e) {
+                e.preventDefault();
+            	var $this = $(this);
+            	if ($this.text() == 'Bind') {
+            		$('#list4').children('tbody').collection('bind-sorter', {
+                        sorter: '#actor',
+                        predicate: ['td:eq(0)', 'td:eq(1)', 'td:eq(2)'],
+                        compare: ['string', 'string', 'int']
+                    }).collection('bind-sorter', {
+                        sorter: '#movie',
+                        predicate: ['td:eq(1)', 'td:eq(0)', 'td:eq(2)'],
+                        compare: ['string', 'string', 'int']
+                    }).collection('bind-sorter', {
+                        sorter: '#year',
+                        predicate: ['td:eq(2)', 'td:eq(1)', 'td:eq(0)'],
+                        compare: ['int', 'string', 'string']
+                    });
+                	$this.text('Unbind');
+            	} else {
+            		$('#list4').children('tbody').collection('unbind-sorter', '#actor, #movie, #year');
+                	$this.text('Bind');
+            	}
+            });
+		});
+		</script>
+</head>
+<body>
+<div>
+<ul id="list0">
+	<li>z</li>
+	<li>b</li>
+	<li>a</li>
+</ul>
+<a id="test0" href="#">Sort</a></div>
+<div>
+<ul id="list1">
+    <li>header</li>
+    <li class="sortable">z</li>
+    <li class="sortable">b</li>
+    <li class="sortable">a</li>
+</ul>
+<a id="test1" href="#">Sort</a></div>
+<div>
+<ul id="list2">
+	<li><input type="checkbox" id="cb2z" /> <label for="cb2z">z</label>
+	</li>
+	<li><input type="checkbox" id="cb2a" /> <label for="cb2a">a</label>
+	</li>
+	<li><input type="checkbox" id="cb2b" /> <label for="cb2b">b</label>
+	</li>
+</ul>
+<a id="test2" href="#">Sort</a></div>
+<div>
+<ul id="list3">
+    <li><input type="checkbox" id="cb3z" /> <label for="cb3z">34</label>
+    </li>
+    <li><input type="checkbox" id="cb3a" /> <label for="cb3a">8</label>
+    </li>
+    <li><input type="checkbox" id="cb3b" /> <label for="cb3b">1</label>
+    </li>
+</ul>
+<a id="test3" href="#">Sort</a></div>
+<div>
+<table id="list4">
+    <thead>
+        <tr>
+            <td>
+                <a id="actor" href="#">Actor</a>
+            </td>
+            <td>
+                <a id="movie" href="#">Movie</a>
+            </td>
+            <td>
+                <a id="year" href="#">Year</a>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Steven Seagal</td>
+            <td>The Glimmer Man</td>
+            <td>1996</td>
+        </tr>
+        <tr>
+            <td>Jean-Claude Van Damme</td>
+            <td>Maximum Risk</td>
+            <td>1996</td>
+        </tr>
+        <tr>
+            <td>Jean-Claude Van Damme</td>
+            <td>Timecop</td>
+            <td>1994</td>
+        </tr>
+        <tr>
+            <td>Jet Li</td>
+            <td>Fist of Legend</td>
+            <td>1994</td>
+        </tr>
+    </tbody>
+</table>
+<a id="test4" href="#">Bind</a>
+</div>
+</body>
+</html>
