@@ -33,7 +33,11 @@
                     compare: 'int'
                 });
             });
-            
+
+            var onSort = function(e, options) {
+                $('#list4 > thead > tr > td > span').text('');
+                $(this).next('span').text(options.descendant ? ' v' : ' ^');
+            };
             $('#test4').click(function(e) {
                 e.preventDefault();
             	var $this = $(this);
@@ -41,15 +45,18 @@
             		$('#list4').children('tbody').collection('bind-sorter', {
                         sorter: '#actor',
                         predicate: ['td:eq(0)', 'td:eq(1)', 'td:eq(2)'],
-                        compare: ['string', 'string', 'int']
+                        compare: ['string', 'string', 'int'],
+                        callback: onSort
                     }).collection('bind-sorter', {
                         sorter: '#movie',
                         predicate: ['td:eq(1)', 'td:eq(0)', 'td:eq(2)'],
-                        compare: ['string', 'string', 'int']
+                        compare: ['string', 'string', 'int'],
+                        callback: onSort
                     }).collection('bind-sorter', {
                         sorter: '#year',
                         predicate: ['td:eq(2)', 'td:eq(1)', 'td:eq(0)'],
-                        compare: ['int', 'string', 'string']
+                        compare: ['int', 'string', 'string'],
+                        callback: onSort
                     });
                 	$this.text('Unbind');
             	} else {
@@ -102,12 +109,15 @@
         <tr>
             <td>
                 <a id="actor" href="#">Actor</a>
+                <span></span>
             </td>
             <td>
                 <a id="movie" href="#">Movie</a>
+                <span></span>
             </td>
             <td>
                 <a id="year" href="#">Year</a>
+                <span></span>
             </td>
         </tr>
     </thead>

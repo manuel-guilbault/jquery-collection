@@ -1,5 +1,4 @@
-﻿
-(function ($) {
+﻿(function ($) {
     var methods = {
         sort: function (options) {
             var settings = {
@@ -73,11 +72,10 @@
         'bind-sorter': function(options) {
         	var settings = {
         		sorter: null,
-        		live: false
+        		live: false,
+        		callback: null
             };
-            if (options) {
-                $.extend(settings, options);
-            }
+        	$.extend(settings, options);
             var sorter = $(settings.sorter);
             var $this = this;
             var handler = function(e) {
@@ -91,6 +89,10 @@
                 $this.data('collection', data);
                 options.descendant = data.sortDesc;
             	$this.collection('sort', options);
+            	if (settings.callback) {
+            		options.sorted = $this.get();
+            		settings.callback.call(this, e, options);
+            	}
             };
             if (settings.live) {
             	sorter.live('click.collection', handler);
@@ -154,7 +156,7 @@
         compareMultiple: function(a, b, type) {
             var result = 0;
             for (var i = 0; i < a.length && result == 0; ++i) {
-                result = $.collection.compare(a[i], b[i], type ? type[i] : null);
+                result = $.collection.compare(a[i], b[i], type ? type[i] : undefined);
             }
             return result;
         }
