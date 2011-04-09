@@ -1,4 +1,10 @@
-﻿(function ($) {
+﻿/*!
+ * jQuery collection utilities v0.1
+ *
+ * Copyright 2011, Manuel Guilbault
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ */
+(function ($) {
 	var methods = {
         sort: function (options) {
             var settings = {
