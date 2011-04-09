@@ -1,5 +1,5 @@
 ﻿(function ($) {
-    var methods = {
+	var methods = {
         sort: function (options) {
             var settings = {
                 descendant: false,
@@ -70,6 +70,15 @@
             });
         },
         'bind-sorter': function(options) {
+        	var data = this.data('collection');
+        	if (data == null) {
+        		data = {
+    				sortField: null,
+    				sortDesc: false,
+    				sorters: []
+        		};
+    			this.data('collection', data);
+    		}
         	var settings = {
         		sorter: null,
         		live: false,
@@ -77,12 +86,15 @@
             };
         	$.extend(settings, options);
             var sorter = $(settings.sorter);
+            data.sorters = data.sorters.concat(sorter.get());
+            this.data('collection', data);
             var $this = this;
             var handler = function(e) {
             	e.preventDefault();
             	var data = $this.data('collection');
-                if (!data || data.sortField != sorter) {
-                	data = { sortField: sorter, sortDesc: false };
+                if (data.sortField != sorter) {
+                	data.sortField = sorter;
+                	data.sortDesc = false;
                 } else {
                 	data.sortDesc = !data.sortDesc;
                 }
@@ -102,18 +114,36 @@
             return this;
         },
         'unbind-sorter': function(options) {
-        	var settings = {
-        		sorter: null
-            };
-        	switch (typeof options) {
-        	case 'object':
-        		$.extend(settings, options);
-        		break;
-        	case 'string':
-        		settings.sorter = options;
-        		break;
+        	var data = this.data('collection');
+        	if (options) {
+	        	var settings = {
+	        		sorter: null
+	            };
+	        	switch (typeof options) {
+	        	case 'object':
+	        		$.extend(settings, options);
+	        		break;
+	        	case 'string':
+	        		settings.sorter = options;
+	        		break;
+	        	}
+	        	var sorter = $(settings.sorter);
+	        	var toRemove = sorter.get();
+	        	for (var i in toRemove) {
+	        		var k = data.sorters.indexOf(toRemove[i]);
+        			if (k != -1) {
+        				data.sorters.splice(k, 1);
+        			}
+	        	}
+        	} else {
+        		var sorter = $(data.sorters);
+        		data.sorters = [];
         	}
-        	var sorter = $(settings.sorter);
+        	if (data.sorters.length == 0) {
+        		this.removeData('collection');
+        	} else {
+        		this.data('collection', data);
+        	}
         	sorter.unbind('click.collection');
         	sorter.die('click.collection');
         	return this;
